@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-token-optimizer"
+version = "1.0.0"
+description = "Universal document & data converter into ultra token-efficient representations for LLMs."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Cristian Garcia" }
+]
+keywords = ["llm", "tokens", "optimizer", "rag", "ai", "bpe", "minifier", "markdown"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "tiktoken>=0.7.0",
+    "beautifulsoup4>=4.12.0",
+    "openpyxl>=3.1.0",
+    "python-docx>=1.1.0",
+    "pypdf>=4.0.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.scripts]
+token-optimizer = "cli:main"

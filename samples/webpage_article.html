@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de Mercado IA 2025</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 20px; }
+        .navbar { display: flex; justify-content: space-between; background: #0f172a; color: white; padding: 15px; }
+        .hero { padding: 40px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; text-align: center; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+        .footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 30px; font-size: 12px; }
+    </style>
+    <script>
+        console.log("Analytics tracker initialized: " + Date.now());
+        window.addEventListener('load', function() {
+            fetch('/api/telemetry', { method: 'POST', body: JSON.stringify({ page: 'market_report', referrer: document.referrer }) });
+        });
+    </script>
+</head>
+<body>
+    <div class="cookie-banner" id="cookie-consent">
+        <p>Utilizamos cookies y tecnologías similares para mejorar su experiencia de usuario.</p>
+        <button onclick="acceptCookies()">Aceptar todas</button>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">TechTrends Global</div>
+        <ul class="nav-links">
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#reports">Informes</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <article class="card">
+            <h1>El Estado de la Inteligencia Artificial Generativa en 2025</h1>
+            <p>La adopción de modelos de lenguaje grande (LLMs) ha alcanzado un punto de inflexión sin precedentes en el entorno empresarial. Más del 78% de las organizaciones del Fortune 500 han integrado asistentes inteligentes en sus flujos operativos de soporte, desarrollo de software y análisis de datos.</p>
+            
+            <h2>Principales Factores de Crecimiento</h2>
+            <ul>
+                <li><strong>Eficiencia Operativa:</strong> Automatización del 60% de tareas repetitivas de redacción y análisis documental.</li>
+                <li><strong>Reducción de Costes:</strong> Disminución del 45% en tiempos de respuesta al cliente.</li>
+                <li><strong>Capacidades Multimodales:</strong> Análisis directo de imágenes, diagramas de arquitectura y transcripciones de audio.</li>
+            </ul>
+
+            <h2>Comparativa de Despliegue Empresarial</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sector Industrial</th>
+                        <th>Nivel de Adopción (%)</th>
+                        <th>ROI Promedio Anual</th>
+                        <th>Caso de Uso Principal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Finanzas & Banca</td>
+                        <td>84%</td>
+                        <td>3.4x</td>
+                        <td>Detección de fraude y extracción documental</td>
+                    </tr>
+                    <tr>
+                        <td>Salud & Farmacia</td>
+                        <td>71%</td>
+                        <td>2.8x</td>
+                        <td>Resumen de historiales clínicos y triaje</td>
+                    </tr>
+                    <tr>
+                        <td>Comercio Electrónico</td>
+                        <td>92%</td>
+                        <td>4.1x</td>
+                        <td>Atención al cliente 24/7 y recomendaciones</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <blockquote>
+                "El valor diferencial ya no radica en disponer de un modelo fundacional, sino en la calidad y síntesis de la información que se le suministra en contexto."
+            </blockquote>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 TechTrends Media Inc. Todos los derechos reservados. Términos de Servicio | Política de Privacidad.</p>
+    </footer>
+</body>
+</html>

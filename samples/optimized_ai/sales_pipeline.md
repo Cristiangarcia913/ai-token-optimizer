@@ -1,0 +1,44 @@
+---
+source_file: sales_pipeline.csv
+converter: SheetConverter
+raw_tokens: 1076
+optimized_tokens: 1185
+reduction: 0.0%
+---
+
+| Deal ID | Account Name | Stage | Deal Value ($) | Probability (%) | Close Date | Owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| DEAL-1001 | Corporacion Alfa 1 | Proposal Sent | 15500 | 50% | 2025-11-02 | Elena Martin |
+| DEAL-1002 | Corporacion Alfa 2 | Contract Review | 19000 | 75% | 2025-11-03 | David Garcia |
+| DEAL-1003 | Corporacion Alfa 3 | Closed Won | 22500 | 100% | 2025-11-04 | Sofia Lopez |
+| DEAL-1004 | Corporacion Alfa 4 | Qualification | 26000 | 25% | 2025-11-05 | Carlos Ruiz |
+| DEAL-1005 | Corporacion Alfa 5 | Proposal Sent | 29500 | 50% | 2025-11-06 | Elena Martin |
+| DEAL-1006 | Corporacion Alfa 6 | Contract Review | 33000 | 75% | 2025-11-07 | David Garcia |
+| DEAL-1007 | Corporacion Alfa 7 | Closed Won | 36500 | 100% | 2025-11-08 | Sofia Lopez |
+| DEAL-1008 | Corporacion Alfa 8 | Qualification | 40000 | 25% | 2025-11-09 | Carlos Ruiz |
+| DEAL-1009 | Corporacion Alfa 9 | Proposal Sent | 43500 | 50% | 2025-11-10 | Elena Martin |
+| DEAL-1010 | Corporacion Alfa 10 | Contract Review | 47000 | 75% | 2025-11-11 | David Garcia |
+| DEAL-1011 | Corporacion Alfa 11 | Closed Won | 50500 | 100% | 2025-11-12 | Sofia Lopez |
+| DEAL-1012 | Corporacion Alfa 12 | Qualification | 54000 | 25% | 2025-11-13 | Carlos Ruiz |
+| DEAL-1013 | Corporacion Alfa 13 | Proposal Sent | 57500 | 50% | 2025-11-14 | Elena Martin |
+| DEAL-1014 | Corporacion Alfa 14 | Contract Review | 61000 | 75% | 2025-11-15 | David Garcia |
+| DEAL-1015 | Corporacion Alfa 15 | Closed Won | 64500 | 100% | 2025-11-16 | Sofia Lopez |
+| DEAL-1016 | Corporacion Alfa 16 | Qualification | 68000 | 25% | 2025-11-17 | Carlos Ruiz |
+| DEAL-1017 | Corporacion Alfa 17 | Proposal Sent | 71500 | 50% | 2025-11-18 | Elena Martin |
+| DEAL-1018 | Corporacion Alfa 18 | Contract Review | 75000 | 75% | 2025-11-19 | David Garcia |
+| DEAL-1019 | Corporacion Alfa 19 | Closed Won | 78500 | 100% | 2025-11-20 | Sofia Lopez |
+| DEAL-1020 | Corporacion Alfa 20 | Qualification | 82000 | 25% | 2025-11-21 | Carlos Ruiz |
+| DEAL-1021 | Corporacion Alfa 21 | Proposal Sent | 85500 | 50% | 2025-11-22 | Elena Martin |
+| DEAL-1022 | Corporacion Alfa 22 | Contract Review | 89000 | 75% | 2025-11-23 | David Garcia |
+| DEAL-1023 | Corporacion Alfa 23 | Closed Won | 92500 | 100% | 2025-11-24 | Sofia Lopez |
+| DEAL-1024 | Corporacion Alfa 24 | Qualification | 96000 | 25% | 2025-11-25 | Carlos Ruiz |
+| DEAL-1025 | Corporacion Alfa 25 | Proposal Sent | 99500 | 50% | 2025-11-26 | Elena Martin |
+| DEAL-1026 | Corporacion Alfa 26 | Contract Review | 103000 | 75% | 2025-11-27 | David Garcia |
+| DEAL-1027 | Corporacion Alfa 27 | Closed Won | 106500 | 100% | 2025-11-28 | Sofia Lopez |
+| DEAL-1028 | Corporacion Alfa 28 | Qualification | 110000 | 25% | 2025-11-01 | Carlos Ruiz |
+| DEAL-1029 | Corporacion Alfa 29 | Proposal Sent | 113500 | 50% | 2025-11-02 | Elena Martin |
+| DEAL-1030 | Corporacion Alfa 30 | Contract Review | 117000 | 75% | 2025-11-03 | David Garcia |
+| DEAL-1031 | Corporacion Alfa 31 | Closed Won | 120500 | 100% | 2025-11-04 | Sofia Lopez |
+| DEAL-1032 | Corporacion Alfa 32 | Qualification | 124000 | 25% | 2025-11-05 | Carlos Ruiz |
+| DEAL-1033 | Corporacion Alfa 33 | Proposal Sent | 127500 | 50% | 2025-11-06 | Elena Martin |
+| DEAL-1034 | Corporacion Alfa 34 | Contract Review | 131000 | 75% | 2025-11-07 | David Garcia |
