@@ -47,6 +47,8 @@ def main():
     )
     parser.add_argument("path", help="Ruta al archivo o carpeta a optimizar.")
     parser.add_argument("-o", "--output", help="Ruta de destino para el archivo o carpeta optimizada.")
+    parser.add_argument("-p", "--prompt",
+                        help="Prompt para Claude: optimiza la consulta con las mejores prácticas de Anthropic para evitar preguntas de retorno.")
     parser.add_argument("--table-format", choices=["auto", "markdown", "tsv"], default="auto",
                         help="Formato de tablas: 'auto' (selecciona el menor consumo de tokens), 'markdown' o 'tsv'")
     parser.add_argument("--strip-comments", action="store_true",
@@ -86,6 +88,21 @@ def main():
     if not os.path.exists(target_path):
         print(f"❌ Error: La ruta especificada no existe: {target_path}")
         sys.exit(1)
+
+    if args.prompt:
+        files = [target_path] if os.path.isfile(target_path) else [
+            os.path.join(target_path, f) for f in os.listdir(target_path) if os.path.isfile(os.path.join(target_path, f))
+        ]
+        claude_res = optimizer.create_claude_prompt(args.prompt, files, **kwargs)
+        print("=" * 72)
+        print("🤖 PROMPT ESTRUCTURADO PARA CLAUDE (ANTHROPIC STANDARD):")
+        print("=" * 72)
+        print(claude_res["payload"])
+        print("=" * 72)
+        print(f"📊 Métricas: Docs originales: {format_number(claude_res['raw_doc_tokens'])} tokens -> Docs optimizados: {format_number(claude_res['optimized_doc_tokens'])} tokens (-{claude_res['doc_reduction_pct']}%)")
+        print(f"🔹 Payload final total para Claude: {format_number(claude_res['final_payload_tokens'])} tokens")
+        print("✨ ¡Listo para copiar y pegar en Claude o enviar vía API sin preguntas de retorno!\n")
+        return
 
     if os.path.isfile(target_path):
         print(f"🔍 Procesando archivo único: {target_path} ...\n")

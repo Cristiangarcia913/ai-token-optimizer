@@ -375,7 +375,12 @@ HTML_UI = """<!DOCTYPE html>
                     </div>
                 </div>
 
-                <div class="form-row" style="margin-top: 18px;">
+                <div style="margin-top: 14px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--accent); display: block; margin-bottom: 4px;">🎯 Instrucción / Prompt para Claude (Opcional):</label>
+                    <input type="text" id="claude-user-prompt" placeholder="Ej: Analiza los patrones principales, riesgos y métricas clave..." style="width: 100%; background: #090d16; border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); padding: 9px 12px; font-size: 13px; outline: none;">
+                </div>
+
+                <div class="form-row" style="margin-top: 14px;">
                     <select id="table-format" title="Formato para Tablas">
                         <option value="auto">Tablas: Auto (Menor tokens)</option>
                         <option value="markdown">Tablas: Markdown</option>
@@ -386,6 +391,9 @@ HTML_UI = """<!DOCTYPE html>
                 </div>
 
                 <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: var(--text-secondary);">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; grid-column: span 2; color: var(--accent); font-weight: 600;">
+                        <input type="checkbox" id="opt-claude-prompt-mode" checked> 🤖 Envolver en Prompt Engineering de Claude (XML + Cero preguntas de retorno)
+                    </label>
                     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
                         <input type="checkbox" id="opt-strip-links"> 🔗 Eliminar URLs de enlaces
                     </label>
@@ -515,6 +523,8 @@ HTML_UI = """<!DOCTYPE html>
             try {
                 let formData = new FormData();
                 formData.append('table_format', tableFormat);
+                formData.append('user_prompt', document.getElementById('claude-user-prompt').value.trim());
+                formData.append('claude_prompt_mode', document.getElementById('opt-claude-prompt-mode').checked ? 'true' : 'false');
                 formData.append('strip_links', document.getElementById('opt-strip-links').checked ? 'true' : 'false');
                 formData.append('factor_constants', document.getElementById('opt-factor-constants').checked ? 'true' : 'false');
                 formData.append('strip_comments', document.getElementById('opt-strip-comments').checked ? 'true' : 'false');
@@ -703,6 +713,8 @@ class OptimizerRequestHandler(BaseHTTPRequestHandler):
         factor_constants = form.getvalue('factor_constants', 'true').lower() == 'true'
         strip_comments = form.getvalue('strip_comments', 'false').lower() == 'true'
         compact_indent = form.getvalue('compact_indent', 'false').lower() == 'true'
+        user_prompt = form.getvalue('user_prompt', '').strip()
+        claude_prompt_mode = form.getvalue('claude_prompt_mode', 'false').lower() == 'true'
 
         optimizer = TokenOptimizer()
 
@@ -736,14 +748,30 @@ class OptimizerRequestHandler(BaseHTTPRequestHandler):
             with open(out_temp, 'r', encoding='utf-8') as f:
                 opt_content = f.read()
 
+            final_text = opt_content
+            final_tokens = res["optimized_tokens"]
+
+            if claude_prompt_mode or user_prompt:
+                from prompt_engineer import ClaudePromptEngineer
+                src_name = orig_name if (mode == 'file' and 'file' in form) else f"Snippet{ext}"
+                final_text = ClaudePromptEngineer.assemble_payload(
+                    user_prompt=user_prompt or "Analiza la información proporcionada y extrae los puntos clave.",
+                    documents=[{"name": src_name, "content": opt_content}],
+                    prevent_stalls=True,
+                    ban_filler=True
+                )
+                final_tokens = count_tokens(final_text, "o200k_base")
+
+            final_savings = calculate_savings(res["raw_tokens"], final_tokens)
+
             response_payload = {
                 "raw_tokens": res["raw_tokens"],
-                "optimized_tokens": res["optimized_tokens"],
-                "reduction_percentage": res["reduction_percentage"],
-                "tokens_saved": res["tokens_saved"],
+                "optimized_tokens": final_tokens,
+                "reduction_percentage": final_savings["reduction_percentage"],
+                "tokens_saved": final_savings["tokens_saved"],
                 "converter": res["converter"],
-                "optimized_text": opt_content,
-                "cost_savings": res["cost_savings"],
+                "optimized_text": final_text,
+                "cost_savings": final_savings["cost_savings"],
             }
 
             self.send_response(200)

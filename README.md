@@ -24,6 +24,10 @@ Reduce el consumo de tokens entre un **15% y un 70%**, elimina el fenómeno *"Lo
 - **📝 Word (DOCX)**: Preserva jerarquías de títulos (`#`, `##`), listas con viñetas y tablas sin la sobrecarga visual o de formato XML.
 - **📈 Excel (XLSX) & CSV**: Poda filas y columnas vacías residuales a la derecha, formateando automáticamente a la estructura tabular con menor coste de tokens (`tsv` o `markdown`).
 - **💻 Código Fuente**: Elimina bloques de licencias de 30 líneas (Apache 2.0, MIT), comentarios prescindibles (`--strip-comments`), docstrings extensos (`--strip-docstrings`) y sangrías redundantes (`--compact-indent`).
+- **🎯 Prompt Engineering Automático para Claude (Anthropic Standard)**:
+  - Estructuración canónica con etiquetas XML (`<documents>`, `<instructions>`, `<constraints>`).
+  - **Directiva Anti-Preguntas (Zero-Stall)**: Fuerza a Claude a resolver la tarea en un único turno con supuestos razonables en lugar de frenar el flujo con preguntas de retorno que consumen tokens de ida y vuelta.
+  - **Cero Relleno Conversacional (Anti-Throat-Clearing)**: Elimina saludos y formalidades que encarecen los tokens de salida (3x-5x más caros que los de entrada).
 - **⚡ Procesamiento Concurrente**: Procesamiento paralelo multihilo para optimizar carpetas masivas a alta velocidad.
 - **🖥️ Dashboard Web + CLI**: Incluye tanto una interfaz de línea de comandos para terminal como una aplicación web interactiva con drag-and-drop.
 
@@ -94,6 +98,13 @@ python cli.py articulo.html --strip-links
 
 # Optimización profunda de código fuente
 python cli.py script.py --strip-comments --strip-docstrings --compact-indent
+```
+
+### 5. Optimizar Documentos + Prompt para Claude (Listo para Copiar y Pegar):
+```bash
+python cli.py informe.pdf --prompt "analiza los riesgos principales y métricas de este informe"
+# Genera el payload XML completo listo para Claude (<documents> + <instructions> + <constraints>)
+# con directivas anti-preguntas y cero relleno para maximizar la precisión en un solo turno.
 ```
 
 ---

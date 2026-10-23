@@ -140,3 +140,57 @@ class TokenOptimizer:
             "cost_savings": overall_savings["cost_savings"],
             "files": results,
         }
+
+    def create_claude_prompt(
+        self,
+        user_prompt: str,
+        filepaths: List[str],
+        task_type: str = "auto",
+        prevent_stalls: bool = True,
+        ban_filler: bool = True,
+        **kwargs
+    ) -> Dict[str, Any]:
+        """
+        Optimizes files and wraps them with an Anthropic-engineered prompt
+        that eliminates conversational stalling, bans filler, and minimizes tokens.
+        """
+        from prompt_engineer import ClaudePromptEngineer
+
+        docs = []
+        total_raw = 0
+        total_opt = 0
+
+        kwargs_clean = dict(kwargs)
+        kwargs_clean['add_metadata_header'] = False
+
+        for path in filepaths:
+            if not os.path.exists(path):
+                continue
+            res = self.optimize_file(path, **kwargs_clean)
+            with open(res["output_path"], 'r', encoding='utf-8') as f:
+                content = f.read()
+            docs.append({
+                "name": os.path.basename(path),
+                "content": content
+            })
+            total_raw += res["raw_tokens"]
+            total_opt += res["optimized_tokens"]
+
+        payload = ClaudePromptEngineer.assemble_payload(
+            user_prompt=user_prompt,
+            documents=docs,
+            task_type=task_type,
+            prevent_stalls=prevent_stalls,
+            ban_filler=ban_filler
+        )
+
+        payload_tokens = count_tokens(payload, self.encoding_name)
+
+        return {
+            "payload": payload,
+            "raw_doc_tokens": total_raw,
+            "optimized_doc_tokens": total_opt,
+            "final_payload_tokens": payload_tokens,
+            "doc_reduction_pct": round((total_raw - total_opt) / total_raw * 100, 2) if total_raw > 0 else 0.0,
+            "documents_count": len(docs)
+        }

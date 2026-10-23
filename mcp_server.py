@@ -128,6 +128,29 @@ def compress_raw_text(
             try: os.remove(out_temp)
             except: pass
 
+@mcp.tool()
+def assemble_claude_prompt(
+    user_prompt: str,
+    filepaths: list[str],
+    prevent_clarifying_questions: bool = True
+) -> str:
+    """
+    Combines local files with a user prompt and wraps them in an Anthropic-engineered prompt.
+    Applies XML tags (<documents>, <instructions>, <constraints>) and injects strict directives
+    to prevent Claude from asking follow-up questions and avoid conversational filler.
+    
+    Args:
+        user_prompt: The task instruction you want to give Claude.
+        filepaths: List of file paths to include as context.
+        prevent_clarifying_questions: Forces Claude to resolve ambiguity directly without stalling for questions.
+    """
+    res = optimizer.create_claude_prompt(
+        user_prompt=user_prompt,
+        filepaths=filepaths,
+        prevent_stalls=prevent_clarifying_questions
+    )
+    return res["payload"]
+
 if __name__ == "__main__":
     # Start stdio MCP transport for Claude Desktop / Claude Code
     mcp.run(transport="stdio")

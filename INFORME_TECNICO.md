@@ -127,7 +127,27 @@ Tomando como base un pipeline de producción que procesa documentos similares a 
 
 ---
 
-## 7. Arquitectura de la Herramienta Desarrollada
+## 7. Optimización Conversacional y Zero-Stall Prompting
+
+Uno de los costes ocultos más graves en el uso de LLMs es el **despilfarro por turnos conversacionales evitables** (*conversational stalling*):
+Cuando se formula una pregunta ambigua o no estructurada a Claude junto a un documento de 10.000 tokens, el modelo con frecuencia se detiene a realizar una pregunta aclaratoria:
+> *"¿Prefieres que priorice el análisis en los datos financieros de 2024 o en la comparativa de 2025?"*
+
+### El Multiplicador de Coste del Re-envío de Historial:
+En las arquitecturas conversacionales actuales, los LLMs son *stateless*. Cada nuevo turno exige **re-enviar la totalidad del historial previo**, incluido el documento completo.
+- **Turno 1 (Pregunta de Claude):** 10.000 tokens de documento + pregunta.
+- **Turno 2 (Tu aclaración):** 10.000 tokens de documento + pregunta + respuesta + análisis final.
+- **Coste total:** ¡Se pagan **más de 20.000 tokens de entrada** por el mismo documento!
+
+### La Solución Implementada: ClaudePromptEngineer
+El módulo `ClaudePromptEngineer` resuelve esto de raíz estructurando la petición según los estándares canónicos de Anthropic:
+1. **Etiquetas XML Canónicas:** Separa limpiamente `<documents>`, `<instructions>` y `<constraints>`, ubicando los documentos *antes* de las instrucciones para maximizar la atención del modelo sobre la tarea.
+2. **Directiva Anti-Stall (*Zero-Stall Resolution*):** Ordena explícitamente a Claude que ante cualquier ambigüedad adopte la suposición profesional más coherente, la declare en una línea y entregue la respuesta final exhaustiva en ese único turno.
+3. **Supresión de Relleno (*Anti-Throat-Clearing*):** Prohíbe frases de cortesía o preámbulos vacíos ("¡Por supuesto! He analizado tus documentos..."). Dado que los tokens de salida son entre 3 y 5 veces más caros que los de entrada, esto reduce un 15-20% adicional de la factura de inferencia.
+
+---
+
+## 8. Arquitectura de la Herramienta Desarrollada
 
 La solución se encuentra implementada en `ai-token-optimizer/` con un diseño desacoplado y extensible:
 
@@ -159,7 +179,7 @@ flowchart TD
 
 ---
 
-## 8. Recomendaciones para Puesta en Producción
+## 9. Recomendaciones para Puesta en Producción
 
 1. **Integrar en la capa de ingesta RAG:** Aplicar el optimizador antes de generar los *embeddings* o almacenar fragmentos en bases de datos vectoriales (Chroma, Pinecone, Qdrant).
 2. **Usar TSV para datos tabulares densos:** Para tablas puramente numéricas o de más de 5 columnas, el formato TSV ahorra entre un 10% y un 15% adicional respecto a las barras verticales de Markdown.
