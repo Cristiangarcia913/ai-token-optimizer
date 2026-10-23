@@ -24,14 +24,14 @@ def run():
     for filepath in files:
         filename = os.path.basename(filepath)
         
-        # Test default
-        res_md = optimizer.optimize_file(filepath, add_metadata_header=False, table_format='markdown')
-        print(f"{filename:<28} | {'Markdown':<12} | {res_md['raw_tokens']:>8} | {res_md['optimized_tokens']:>10} | -{res_md['reduction_percentage']:>8.1f}%")
+        # Test Auto (Optimal token reduction)
+        res_auto = optimizer.optimize_file(filepath, add_metadata_header=False, table_format='auto')
+        print(f"{filename:<28} | {'Auto (Opt)':<12} | {res_auto['raw_tokens']:>8} | {res_auto['optimized_tokens']:>10} | -{res_auto['reduction_percentage']:>8.1f}%")
         
-        # If it's a tabular/json file, also show TSV
+        # Also show Markdown if different
         if any(filepath.endswith(x) for x in ['.csv', '.tsv', '.xlsx', '.json']):
-            res_tsv = optimizer.optimize_file(filepath, add_metadata_header=False, table_format='tsv')
-            print(f"{filename:<28} | {'TSV (Dense)':<12} | {res_tsv['raw_tokens']:>8} | {res_tsv['optimized_tokens']:>10} | -{res_tsv['reduction_percentage']:>8.1f}%")
+            res_md = optimizer.optimize_file(filepath, add_metadata_header=False, table_format='markdown')
+            print(f"{filename:<28} | {'Markdown':<12} | {res_md['raw_tokens']:>8} | {res_md['optimized_tokens']:>10} | -{res_md['reduction_percentage']:>8.1f}%")
 
     print("-" * 80 + "\n")
 

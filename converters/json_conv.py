@@ -152,24 +152,12 @@ class StructuredDataConverter(BaseConverter):
         if not active_headers:
             return prefix_header.strip()
 
-        # Format as TSV
-        tsv_lines = ["\t".join(active_headers)]
+        matrix = [active_headers]
         for item in items:
-            row = [str(item.get(h, '')).replace('\n', ' ').replace('\t', ' ') for h in active_headers]
-            tsv_lines.append("\t".join(row))
-        tsv_text = "\n".join(tsv_lines)
+            row = [str(item.get(h, '')).replace('\n', ' ') for h in active_headers]
+            matrix.append(row)
 
-        # Format as Markdown Table
-        header_row = "| " + " | ".join(active_headers) + " |"
-        sep_row = "| " + " | ".join(["---"] * len(active_headers)) + " |"
-        md_rows = [header_row, sep_row]
-        for item in items:
-            row_cells = [str(item.get(h, '')).replace('\n', ' ').replace('|', '\\|') for h in active_headers]
-            md_rows.append("| " + " | ".join(row_cells) + " |")
-        md_text = "\n".join(md_rows)
-
-        # In auto mode, choose between TSV and Markdown
-        chosen = tsv_text if (table_format == 'tsv' or (table_format == 'auto' and len(tsv_text) <= len(md_text))) else md_text
+        chosen = self.format_table_optimally(matrix, preferred_format=table_format)
         return prefix_header + chosen
 
     def _xml_to_dict(self, element: ET.Element) -> Any:

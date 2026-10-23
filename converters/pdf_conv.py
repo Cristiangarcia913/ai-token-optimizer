@@ -111,9 +111,12 @@ class PDFConverter(BaseConverter):
                     skip_next = True
                     continue
 
-                # Soft wrap check: current line does not end with punctuation (. : ! ?) and next line begins with lowercase
-                if current and not current[-1] in '.!?:;"\'' and next_line and next_line[0].islower():
-                    joined_lines.append(current + " " + next_line)
+                # Soft wrap check: current line does not end with sentence-ending punctuation (. ? !)
+                # and next line is not a bullet point, heading or numbered item
+                is_bullet = bool(re.match(r'^[•–\-*]|\d+\.\s', next_line.strip()))
+                is_header = len(next_line.strip()) < 60 and (next_line.strip().isupper() or next_line.strip().endswith(':'))
+                if current and current[-1] not in '.!?:' and not is_bullet and not is_header:
+                    joined_lines.append(current + " " + next_line.strip())
                     skip_next = True
                     continue
 

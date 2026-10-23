@@ -94,10 +94,11 @@ xychart-beta
 
 | Archivo de Prueba | Naturaleza del Documento | Tokens Originales | Tokens Optimizados | Reducción Real (%) | Tokens Ahorrados |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| `webpage_article.html` | Artículo web con diseño, scripts y ads | 1.048 | 317 | **-69.8%** | 731 |
-| `enterprise_customers.json`| 40 registros homogéneos de clientes API | 4.389 | 1.805 (TSV) / 1.948 (MD) | **-58.9%** | 2.584 |
+| `webpage_article.html` | Artículo web con diseño, scripts y ads | 1.048 | 301 | **-71.3%** | 747 |
+| `enterprise_customers.json`| 40 registros homogéneos de clientes API | 4.389 | 1.669 (Opt) / 1.837 (MD) | **-62.0%** | 2.720 |
 | `service_auth.py` | Código backend con cabecera de licencia | 402 | 241 | **-40.0%** | 161 |
-| `audit_report.pdf` | Documento PDF de 2 páginas con membrete | 181 | 151 | **-16.6%** | 30 |
+| `audit_report.pdf` | Documento PDF de 2 páginas con membrete | 181 | 147 | **-18.8%** | 34 |
+| `sales_pipeline.csv` | Pipeline de ventas tabular | 1.076 | 1.040 | **-3.4%** | 36 |
 
 > [!TIP]
 > En colecciones extensas de datos (por ejemplo, respuestas de base de datos con miles de filas en JSON o páginas web completas), la reducción supera habitualmente el **60%**, lo que permite cuadruplicar el volumen de información útil que cabe en un solo *prompt*.

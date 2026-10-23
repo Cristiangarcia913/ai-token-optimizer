@@ -39,15 +39,7 @@ class TokenOptimizer:
         final_content = []
         if add_metadata_header:
             filename = os.path.basename(filepath)
-            header = (
-                f"---\n"
-                f"source_file: {filename}\n"
-                f"converter: {converter.__class__.__name__}\n"
-                f"raw_tokens: {raw_tokens}\n"
-                f"optimized_tokens: {opt_tokens}\n"
-                f"reduction: {savings['reduction_percentage']}%\n"
-                f"---\n\n"
-            )
+            header = f"<!-- [{filename} | tokens: {raw_tokens} -> {opt_tokens} (-{savings['reduction_percentage']}%) | {converter.__class__.__name__}] -->\n\n"
             final_content.append(header)
 
         final_content.append(optimized_text)

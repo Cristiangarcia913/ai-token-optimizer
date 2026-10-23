@@ -102,17 +102,4 @@ class DocxConverter(BaseConverter):
             while len(r) < max_cols:
                 r.append("")
 
-        if table_format == 'tsv':
-            return "\n".join(["\t".join(r) for r in cleaned_matrix])
-
-        header = cleaned_matrix[0]
-        data = cleaned_matrix[1:] if len(cleaned_matrix) > 1 else []
-
-        lines = [
-            "| " + " | ".join(c.replace("|", "\\|") for c in header) + " |",
-            "| " + " | ".join(["---"] * max_cols) + " |"
-        ]
-        for r in data:
-            lines.append("| " + " | ".join(c.replace("|", "\\|") for c in r) + " |")
-
-        return "\n".join(lines)
+        return self.format_table_optimally(cleaned_matrix, preferred_format=table_format)

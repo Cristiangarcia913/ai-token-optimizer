@@ -35,10 +35,11 @@ Mediciones obtenidas empíricamente con el codificador BPE oficial de OpenAI (`o
 
 | Formato Origen | Conversor | Tokens Originales | Tokens Optimizados | Reducción Real | Tokens Ahorrados |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **HTML (Web con scripts y ads)** | `HTMLConverter` | 1.048 | 317 | **-69.8%** | 731 |
-| **JSON (40 clientes API)** | `StructuredDataConverter` | 4.389 | 1.696 | **-61.4%** | 2.693 |
+| **HTML (Web con scripts y ads)** | `HTMLConverter` | 1.048 | 301 | **-71.3%** | 747 |
+| **JSON (40 clientes API)** | `StructuredDataConverter` | 4.389 | 1.669 | **-62.0%** | 2.720 |
 | **Código Python (con licencia)** | `CodeConverter` | 402 | 241 | **-40.0%** | 161 |
-| **PDF (Informe de 2 págs)** | `PDFConverter` | 181 | 151 | **-16.6%** | 30 |
+| **PDF (Informe de 2 págs)** | `PDFConverter` | 181 | 147 | **-18.8%** | 34 |
+| **CSV (Pipeline de ventas)** | `SheetConverter` | 1.076 | 1.040 | **-3.4%** | 36 |
 
 ---
 

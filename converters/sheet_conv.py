@@ -96,46 +96,4 @@ class SheetConverter(BaseConverter):
         return cleaned
 
     def _format_table(self, rows: List[List[str]], table_format: str) -> str:
-        if not rows:
-            return ""
-
-        if table_format == 'tsv':
-            lines = ["\t".join(r) for r in rows]
-            return "\n".join(lines)
-
-        if table_format == 'auto':
-            # Compare TSV vs Markdown and pick the more token-efficient one
-            tsv_lines = ["\t".join(r) for r in rows]
-            tsv_text = "\n".join(tsv_lines)
-            
-            # Markdown table
-            header = rows[0]
-            data = rows[1:] if len(rows) > 1 else []
-            col_count = len(header)
-            md_lines = [
-                "| " + " | ".join(c.replace("|", "\\|").replace("\n", " ") for c in header) + " |",
-                "| " + " | ".join(["---"] * col_count) + " |"
-            ]
-            for row in data:
-                row_padded = row + [""] * (col_count - len(row))
-                md_lines.append("| " + " | ".join(c.replace("|", "\\|").replace("\n", " ") for c in row_padded[:col_count]) + " |")
-            md_text = "\n".join(md_lines)
-
-            # TSV is virtually always fewer tokens than markdown pipes
-            return tsv_text if len(tsv_text) <= len(md_text) else md_text
-
-        # Markdown Table
-        header = rows[0]
-        data = rows[1:] if len(rows) > 1 else []
-        col_count = len(header)
-
-        lines = [
-            "| " + " | ".join(c.replace("|", "\\|").replace("\n", " ") for c in header) + " |",
-            "| " + " | ".join(["---"] * col_count) + " |"
-        ]
-        for row in data:
-            # Pad row if necessary
-            row_padded = row + [""] * (col_count - len(row))
-            lines.append("| " + " | ".join(c.replace("|", "\\|").replace("\n", " ") for c in row_padded[:col_count]) + " |")
-
-        return "\n".join(lines)
+        return self.format_table_optimally(rows, preferred_format=table_format)

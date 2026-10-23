@@ -119,5 +119,27 @@ def add(a: int, b: int) -> int:
         finally:
             os.remove(temp_path)
 
+    def test_lossless_unicode_normalization(self):
+        from converters.base import BaseConverter
+        # Test ligatures and smart quotes
+        raw = 'El “informe ﬁnanciero” tiene 12.00 € y guiones – largos.'
+        cleaned = BaseConverter.clean_text_spacing(raw)
+        self.assertIn('financiero', cleaned) # ligature 'fi' normalized losslessly
+        self.assertIn('"informe financiero"', cleaned) # smart quotes normalized to ascii
+        self.assertNotIn('“', cleaned)
+
+    def test_format_table_optimally_lossless(self):
+        from converters.base import BaseConverter
+        rows = [
+            ["ID", "Name", "Score"],
+            ["1", "Alice", "95.00"],
+            ["2", "Bob", "88.50"]
+        ]
+        res = BaseConverter.format_table_optimally(rows, preferred_format='auto')
+        self.assertIn("Alice", res)
+        self.assertIn("Bob", res)
+        self.assertIn("95", res) # 95.00 normalized to 95 without information loss
+        self.assertIn("88.5", res)
+
 if __name__ == '__main__':
     unittest.main()
