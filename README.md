@@ -114,6 +114,59 @@ Abre en tu navegador: `http://127.0.0.1:8765`
 
 ---
 
+## 🤖 Integración con Claude (Desktop, Code, Web & API)
+
+Puedes integrar este optimizador directamente con **Claude** para que cualquier documento sea pre-procesado automáticamente antes de llegar a su contexto:
+
+### 1. Claude Desktop & Claude Code (Nativo vía MCP)
+Anthropic soporta el **Model Context Protocol (MCP)**. Configura el servidor en tu `claude_desktop_config.json` (ubicado en `%APPDATA%\Claude\claude_desktop_config.json` en Windows o `~/Library/Application Support/Claude/` en macOS):
+
+```json
+{
+  "mcpServers": {
+    "token-optimizer": {
+      "command": "python",
+      "args": [
+        "C:\\Users\\crist\\.gemini\\antigravity\\scratch\\ai-token-optimizer\\mcp_server.py"
+      ]
+    }
+  }
+}
+```
+
+Una vez configurado, Claude dispondrá automáticamente de la herramienta `read_and_optimize_file`. Puedes añadir a sus instrucciones personalizadas:
+> *"Siempre que vayas a analizar o leer archivos locales, utiliza la herramienta `read_and_optimize_file` para procesar la información de forma compacta y ahorrar tokens."*
+
+### 2. Claude Web (claude.ai en el navegador)
+Para la versión web, utiliza el vigilante de carpetas automático:
+```bash
+python folder_watcher.py --watch ./claude_inbox
+```
+Cualquier PDF, Word, Excel o JSON que arrastres a la carpeta `claude_inbox/` se convertirá en cuestión de milisegundos en un `.optimized.md` listo para arrastrar directamente al chat de Claude.
+
+### 3. Claude API (Python SDK)
+```python
+import anthropic
+from optimizer import TokenOptimizer
+
+client = anthropic.Anthropic()
+optimizer = TokenOptimizer()
+
+# Pre-procesar antes de enviar a Claude
+doc_opt = optimizer.optimize_file("informe_financiero.pdf")["optimized_text"]
+
+message = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": f"Analiza el siguiente documento:\n\n{doc_opt}"}
+    ]
+)
+print(message.content[0].text)
+```
+
+---
+
 ## 🧩 Integración en Python (RAG & Agentes)
 
 ```python
